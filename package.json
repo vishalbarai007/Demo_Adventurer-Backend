@@ -14,7 +14,8 @@
   "version": "1.0.0",
   "main": "App.js",
   "scripts": {
-    "start": "node script.js",
+    "build": "nodemon App.js",
+    "start": "node App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
