@@ -140,7 +140,8 @@ app.post("/verify" , (req, res) =>{
     console.log(decoded);
     res.send({
       "valid" : true,
-      "message" : "valid"
+      "message" : "valid",
+      "user_id": decoded
     })
   } catch (error) {
     res.send({
@@ -150,6 +151,28 @@ app.post("/verify" , (req, res) =>{
 
   }
 })
+
+
+app.post("/get-user-data", async (req,res) => {
+  const {username} = req.body;
+
+  try{
+    const data = await userData.findOne({_id: username});
+    console.log(data);
+    res.send({
+      "userData": true,
+      "username": data.username,
+      "message": "User Found"
+    })
+  }
+  catch(err){
+    res.send({
+      "userData": false,
+      "message": "User Data null"
+    })
+  }
+})
+
 
 var token = jwt.sign({ foo: "bar" }, JWTsecret);
 console.log(token);
