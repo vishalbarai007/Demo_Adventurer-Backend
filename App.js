@@ -1,6 +1,5 @@
 const cors = require("cors");
 const mongoose = require("mongoose");
-const express = require("express");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const app = express();
@@ -14,6 +13,10 @@ require("dotenv").config();
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 const JWTsecret = process.env.JWT_SECRET;
+const socket = require("socket.io");
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const express = require("express");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -134,10 +137,10 @@ app.post("/register", (req, res) => {
 
 app.post("/verify" , (req, res) =>{
   const token = req.headers.authorization.split(' ')[1];
-  console.log(token);
+  // console.log(token);
   try {
     const decoded = jwt.verify(token, JWTsecret);
-    console.log(decoded);
+    // console.log(decoded);
     res.send({
       "valid" : true,
       "message" : "valid",
@@ -152,26 +155,34 @@ app.post("/verify" , (req, res) =>{
   }
 })
 
+app.post("/get-user-data", async (req, res) => {
+  const { userId } = req.body;
+  console.log(userId);
+  
 
-app.post("/get-user-data", async (req,res) => {
-  const {username} = req.body;
-
-  try{
-    const data = await userData.findOne({_id: username});
+  try {
+    const data = await userData.findOne({ _id: userId });
     console.log(data);
-    res.send({
-      "userData": true,
-      "username": data.username,
-      "message": "User Found"
-    })
-  }
-  catch(err){
+
+    if (data) {
+      res.send({
+        "userData": true,
+        "username": data.username,
+        "message": "User Found"
+      });
+    } else {
+      res.send({
+        "userData": false,
+        "message": "User not found"
+      });
+    }
+  } catch (err) {
     res.send({
       "userData": false,
-      "message": "User Data null"
-    })
+      "message": "Error in fetching user data"
+    });
   }
-})
+});
 
 
 var token = jwt.sign({ foo: "bar" }, JWTsecret);
