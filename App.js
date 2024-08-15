@@ -1,4 +1,5 @@
 const cors = require("cors");
+const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
@@ -13,10 +14,10 @@ require("dotenv").config();
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 const JWTsecret = process.env.JWT_SECRET;
-const socket = require("socket.io");
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-const express = require("express");
+const fs = require("fs");
+// const socket = require("socket.io");
+// const server = require('http').createServer(app);
+// const io = require('socket.io')(server);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -39,6 +40,9 @@ app.use(bodyParser.json());
 //   PlaceRating : 5,
 //   PlaceReview : "good place",
 // })
+
+fs.writeFileSync("")
+
 
 app.get("/users", async (req, res) => {
   try {
