@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 //   PlaceReview : "good place",
 // })
 
-fs.writeFileSync("")
+// fs.writeFileSync("")
 
 
 app.get("/users", async (req, res) => {
